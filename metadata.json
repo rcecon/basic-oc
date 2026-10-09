@@ -1,0 +1,6 @@
+{
+  "name": "DSE Econ: Opportunity Cost Mastery",
+  "description": "Interactive learning and answer-building platform for Hong Kong Form 4 Economics students to master DSE-style Opportunity Cost questions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
