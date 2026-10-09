@@ -50,8 +50,11 @@ export const PractiseFadingFlow: React.FC<PractiseFadingFlowProps> = ({
     setShowIndependentClue(false);
   }, [question.id]);
 
-  const chosenOpt = question.options.find(o => o.id === question.chosenOptionId);
-  const forgoneOptName = question.reasoningSummary.initialForgoneOptionName;
+  const chosenOpt = question.options.find(o => o.id === question.chosenOptionId) || question.options[0];
+  const forgoneOpt = [...question.options]
+    .filter(o => o.id !== chosenOpt?.id)
+    .sort((a, b) => a.originalRank - b.originalRank)[0] || question.options[1];
+  const forgoneOptName = forgoneOpt ? forgoneOpt.name : question.reasoningSummary.initialForgoneOptionName;
   const isThirdOptionCase = question.reasoningSummary.affectsThird;
   const isWhetherCase = question.level === 5;
   const expectedCostChange = question.reasoningSummary.finalCostChange;
@@ -157,8 +160,8 @@ export const PractiseFadingFlow: React.FC<PractiseFadingFlowProps> = ({
       options: question.options.map(opt => ({
         id: opt.id,
         text: opt.name,
-        isCorrect: opt.id === question.chosenOptionId,
-        feedback: opt.id === question.chosenOptionId
+        isCorrect: opt.id === chosenOpt?.id,
+        feedback: opt.id === chosenOpt?.id
           ? `Correct! The question asks about the opportunity cost of ${actionTarget}.`
           : `Not this one. The question is specifically asking about the opportunity cost of ${actionTarget}.`
       }))
@@ -172,12 +175,12 @@ export const PractiseFadingFlow: React.FC<PractiseFadingFlowProps> = ({
       titleZh: `第二步：甚麼是「${actionTarget}」的成本？（即：放棄的最高價值選項是什麼？）`,
       hint: `The opportunity cost of ${actionTarget} is the value of the highest-valued option forgone.`,
       options: question.options
-        .filter(opt => opt.id !== question.chosenOptionId)
+        .filter(opt => opt.id !== chosenOpt?.id)
         .map(opt => ({
           id: opt.id,
           text: `${opt.name} (${opt.originalRank === 1 ? '1st' : opt.originalRank === 2 ? '2nd' : '3rd'} preference)`,
-          isCorrect: opt.name.toLowerCase().includes(forgoneOptName.toLowerCase().slice(0, 10)) || forgoneOptName.toLowerCase().includes(opt.name.toLowerCase().slice(0, 10)),
-          feedback: (opt.name.toLowerCase().includes(forgoneOptName.toLowerCase().slice(0, 10)) || forgoneOptName.toLowerCase().includes(opt.name.toLowerCase().slice(0, 10)))
+          isCorrect: opt.id === forgoneOpt?.id,
+          feedback: opt.id === forgoneOpt?.id
             ? `Correct! ${opt.name} is the highest-ranked alternative forgone.`
             : `Incorrect. This alternative was ranked lower than ${forgoneOptName}.`
         }))
@@ -339,9 +342,28 @@ export const PractiseFadingFlow: React.FC<PractiseFadingFlowProps> = ({
     {
       id: 'step-cost',
       stepNumber: '4',
-      title: `What happens to the opportunity cost of ${actionTarget}?`,
-      titleZh: `第四步：因此，${actionTarget} 的機會成本最終結論是什麼？（依據題目）`,
+      title: question.level === 5 ? question.prompt : `What happens to the opportunity cost of ${actionTarget}?`,
+      titleZh: question.level === 5
+        ? `第四步：${question.promptZh || `因此，${actionTarget} 的機會成本是否必然保持不變？`}`
+        : `第四步：因此，${actionTarget} 的機會成本最終結論是什麼？（依據題目）`,
       options: (() => {
+        if (question.level === 5) {
+          return [
+            {
+              id: 'yes_necessarily_unchanged',
+              text: `Yes, because the opportunity cost of ${actionTarget} may remain unchanged`,
+              isCorrect: false,
+              feedback: `Careful! "Necessarily remains unchanged" means it MUST remain unchanged in ALL cases. Since there is a case where the opportunity cost of ${actionTarget} increases, the answer is No!`
+            },
+            {
+              id: 'no_may_increase',
+              text: `No, because the opportunity cost of ${actionTarget} may increase`,
+              isCorrect: true,
+              feedback: `Spot on! Because the opportunity cost of ${actionTarget} may increase (if the 3rd option's value exceeds ${forgoneOptName}), it does NOT necessarily remain unchanged.`
+            }
+          ];
+        }
+
         const baseOptions = [
           {
             id: 'decreases',
@@ -375,15 +397,6 @@ export const PractiseFadingFlow: React.FC<PractiseFadingFlowProps> = ({
             text: `The opportunity cost of ${actionTarget} may increase`,
             isCorrect: expectedCostChange === 'may_increase',
             feedback: `Correct! Because it only increases IF the value exceeds ${forgoneOptName}, it "may increase".`
-          });
-        }
-
-        if (question.level === 5) {
-          baseOptions.push({
-            id: 'not_necessarily_unchanged',
-            text: `No — the opportunity cost of ${actionTarget} does not necessarily remain unchanged (it may increase if the 3rd option exceeds ${forgoneOptName})`,
-            isCorrect: true,
-            feedback: `Spot on! Because the opportunity cost increases if the 3rd option's value exceeds ${forgoneOptName}, it does NOT necessarily remain unchanged.`
           });
         }
 

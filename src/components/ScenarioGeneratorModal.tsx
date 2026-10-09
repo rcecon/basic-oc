@@ -34,6 +34,7 @@ export const ScenarioGeneratorModal: React.FC<ScenarioGeneratorModalProps> = ({
         const base = DSE_QUESTIONS.find(q => q.level === selectedLevel) || DSE_QUESTIONS[0];
         const completeQuestion: DSEQuestion = {
           ...base,
+          ...generated,
           id: generated.id || `GEN-${Date.now()}`,
           level: selectedLevel,
           title: generated.title || `Custom Scenario: Level ${selectedLevel}`,
@@ -42,6 +43,10 @@ export const ScenarioGeneratorModal: React.FC<ScenarioGeneratorModalProps> = ({
           prompt: generated.prompt || base.prompt,
           promptZh: generated.promptZh || base.promptZh,
           options: (generated.options as any) || base.options,
+          chosenOptionId: generated.chosenOptionId || base.chosenOptionId,
+          affectedOptionId: generated.affectedOptionId || base.affectedOptionId,
+          valueChange: generated.valueChange || base.valueChange,
+          reasoningSummary: generated.reasoningSummary || base.reasoningSummary,
           modelAnswer: generated.modelAnswer || base.modelAnswer,
           modelAnswerZh: generated.modelAnswerZh || base.modelAnswerZh
         };

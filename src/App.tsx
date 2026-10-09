@@ -33,7 +33,14 @@ export default function App() {
   
   // Modals
   const [isChineseHintOpen, setIsChineseHintOpen] = useState(false);
-  const [isScenarioModalOpen, setIsScenarioModalOpen] = useState(false);
+
+  const handleCycleScenarioInLevel = () => {
+    const levelQuestions = DSE_QUESTIONS.filter(q => q.level === currentLevel);
+    if (levelQuestions.length <= 1) return;
+    const currentIdx = levelQuestions.findIndex(q => q.id === currentQuestion.id);
+    const nextIdx = (currentIdx + 1) % levelQuestions.length;
+    setCurrentQuestion(levelQuestions[nextIdx]);
+  };
 
   // Gamification & Progress tracking
   const [completedQuestionIds, setCompletedQuestionIds] = useState<string[]>(() => {
@@ -116,7 +123,7 @@ export default function App() {
         onChangeLevel={(lvl) => {
           setCurrentLevel(lvl);
         }}
-        onGenerateNew={() => setIsScenarioModalOpen(true)}
+        onGenerateNew={handleCycleScenarioInLevel}
       />
 
       {/* Main Container with 2-Column Side-by-Side Layout */}
@@ -152,7 +159,7 @@ export default function App() {
                   </div>
 
                   <button
-                    onClick={() => setIsScenarioModalOpen(true)}
+                    onClick={handleCycleScenarioInLevel}
                     className="px-2.5 py-1 text-xs font-semibold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg transition-colors cursor-pointer shrink-0"
                   >
                     Switch
@@ -290,17 +297,6 @@ export default function App() {
         onClose={() => setIsChineseHintOpen(false)}
         promptZh={currentQuestion.promptZh}
         hints={currentQuestion.chineseHints}
-      />
-
-      {/* Scenario Selector & Generator Modal */}
-      <ScenarioGeneratorModal
-        isOpen={isScenarioModalOpen}
-        onClose={() => setIsScenarioModalOpen(false)}
-        currentLevel={currentLevel}
-        onSelectQuestion={(q) => {
-          setCurrentQuestion(q);
-          setCurrentLevel(q.level);
-        }}
       />
     </div>
   );

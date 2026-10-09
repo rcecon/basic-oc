@@ -1375,12 +1375,12 @@ export const DSE_QUESTIONS: DSEQuestion[] = [
       },
       {
         id: 4,
-        question: 'Step 4: Combining both possibilities, does the opportunity cost "necessarily" remain unchanged?',
-        questionZh: '第四步：綜合兩種情況，機會成本是否「必然」保持不變？',
-        explanation: 'Since there is a valid possibility where cost changes, it is NOT necessarily unchanged.',
+        question: 'Step 4: Explain whether Sarah\'s opportunity cost of visiting Ocean Park necessarily remains unchanged.',
+        questionZh: '第四步：解釋 Sarah 去海洋公園的機會成本是否「必然保持不變」（necessarily remains unchanged）。',
+        explanation: 'Since there is a valid possibility where cost increases, it does NOT necessarily remain unchanged.',
         options: [
-          { id: 's4-a', text: 'No. Because there is a possibility that the opportunity cost increases, it does NOT necessarily remain unchanged.', isCorrect: true, feedback: 'Spot on! This is the exact DSE level 5 distinction.' },
-          { id: 's4-b', text: 'Yes, it must remain unchanged.', isCorrect: false, feedback: 'You just proved it could increase!' }
+          { id: 's4-a', text: 'Yes, because the opportunity cost of visiting Ocean Park may remain unchanged', isCorrect: false, feedback: 'Careful! "Necessarily remains unchanged" means it MUST remain unchanged in ALL cases. Since there is a case where it increases, the answer is No!' },
+          { id: 's4-b', text: 'No, because the opportunity cost of visiting Ocean Park may increase', isCorrect: true, feedback: 'Spot on! This is the exact DSE level 5 distinction.' }
         ]
       }
     ],
@@ -1548,12 +1548,12 @@ export const DSE_QUESTIONS: DSEQuestion[] = [
       },
       {
         id: 4,
-        question: 'Step 4: Combining both possibilities, does Davis\'s opportunity cost "necessarily" remain unchanged?',
-        questionZh: '第四步：綜合兩種情況，Davis 的機會成本是否「必然」保持不變？',
+        question: 'Step 4: Explain whether Davis\'s opportunity cost of watching the movie necessarily remains unchanged.',
+        questionZh: '第四步：解釋 Davis 看電影的機會成本是否「必然保持不變」（necessarily remains unchanged）。',
         explanation: 'Give a direct answer addressing "necessarily".',
         options: [
-          { id: 's4-a', text: 'No. Because there is a possibility that the opportunity cost increases, it does NOT necessarily remain unchanged.', isCorrect: true, feedback: 'Spot on! That directly answers the "Explain whether ... necessarily" prompt.' },
-          { id: 's4-b', text: 'Yes, it necessarily remains unchanged.', isCorrect: false, feedback: 'If the value of playing video games exceeds tutoring, the cost increases!' }
+          { id: 's4-a', text: 'Yes, because the opportunity cost of watching the movie may remain unchanged', isCorrect: false, feedback: 'Careful! "Necessarily remains unchanged" means it MUST remain unchanged in ALL cases. Since there is a case where the cost increases, the answer is No!' },
+          { id: 's4-b', text: 'No, because the opportunity cost of watching the movie may increase', isCorrect: true, feedback: 'Spot on! That directly answers the "Explain whether ... necessarily" prompt.' }
         ]
       }
     ],
