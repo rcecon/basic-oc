@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { CheckCircle2, XCircle, Clock, Send, Lightbulb, BookOpen, RotateCcw, AlertTriangle, ArrowRight, Languages } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Send, Lightbulb, BookOpen, RotateCcw, AlertTriangle, ArrowRight } from 'lucide-react';
 import { DSEQuestion, EvaluationResult } from '../types/economics';
 import { evaluateWithAI } from '../services/geminiService';
 
 interface DSEChallengeProps {
   question: DSEQuestion;
-  onOpenChineseHint: () => void;
   onNextQuestion: () => void;
   onRecordMistake: (misconceptionType: any) => void;
 }
 
 export const DSEChallenge: React.FC<DSEChallengeProps> = ({
   question,
-  onOpenChineseHint,
   onNextQuestion,
   onRecordMistake
 }) => {
@@ -50,28 +48,18 @@ export const DSEChallenge: React.FC<DSEChallengeProps> = ({
   return (
     <div className="bg-white border border-stone-200/90 rounded-xl overflow-hidden shadow-xs">
       {/* Top Banner */}
-      <div className="px-6 py-4 border-b border-stone-200 bg-stone-50/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-rose-900 bg-rose-100/70 px-2 py-0.5 rounded">
-            DSE Exam Simulation (文憑試實戰挑戰)
+      <div className="px-3 sm:px-6 py-2.5 sm:py-4 border-b border-stone-200 bg-stone-50/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-rose-900 bg-rose-100/70 px-1.5 sm:px-2 py-0.5 rounded">
+            3. DSE Challenge
           </span>
-          <span className="text-xs text-stone-500 font-mono">
-            Level {question.level} · {question.markingRubric.points.length} Marks
+          <span className="text-[10px] sm:text-xs text-stone-500 font-mono">
+            {question.markingRubric.points.length} Marks
           </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onOpenChineseHint}
-            className="px-3 py-1.5 text-xs font-medium text-amber-900 bg-amber-50 hover:bg-amber-100/80 border border-amber-200/80 rounded-lg transition-colors flex items-center gap-1.5"
-          >
-            <Languages className="w-3.5 h-3.5 text-amber-700" />
-            <span>中文提示 (Question Help)</span>
-          </button>
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-2.5 sm:p-6 space-y-3 sm:space-y-6">
         {/* Scenario Card */}
         <div className="p-4 bg-stone-50 rounded-xl border border-stone-200 space-y-2">
           <div className="text-xs font-bold text-stone-500 uppercase tracking-wider">
